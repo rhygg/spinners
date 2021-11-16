@@ -11,4 +11,4 @@ fn main() {
 
 ```
 
-Check out all the spinners in the `spinners.json` file!
+Check out all the spinners in the [`spinners.json`](https://github.com/rhygg/spinners/blob/master/spinners.json) file!
