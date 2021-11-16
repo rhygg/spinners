@@ -2,7 +2,7 @@ module spinners
 
 import os { read_file }
 import json { decode }
-import time { sleep }
+import time { sleep, millisecond }
 
 struct Spinner {
      name string  // name of the spinner
@@ -11,53 +11,42 @@ struct Spinner {
 }
 
 pub fn get_frames(_posx string) ?[]string {
-
-    spinners_data := os.read_file(os.real_path(os.join_path(os.dir(@FILE), "./spinners.json"))) ?
+    spinners_data := read_file(os.real_path(os.join_path(os.dir(@FILE), "./spinners.json"))) ?
   
-    mut sets := json.decode([]Spinner, spinners_data) ?
+    mut sets := decode([]Spinner, spinners_data) ?
 
-    mut matched := []string{}
-           
     for mut set in sets {
-        if set.name == _posx {
-            matched = set.frames
+        if set.name == _posx && set.frames != [] {
+            return set.frames
         }
     }
 
-    return matched
+    return error("Couldn't find the specified spinner")
 }
 
 pub fn get_interval(_posx string) ?int {
     spinners_data := os.read_file(os.real_path(os.join_path(os.dir(@FILE), "./spinners.json"))) ?
 
     mut sets := decode([]Spinner, spinners_data) ?
-
-    mut matched := 0
-
     for mut set in sets {
         if set.name == _posx {
-            matched = set.interval
+            return set.interval
         }
     }
 
-    return matched
+    return 0
 }
 
 pub fn print_spinner(prefix string, frames []string, interval int) ? {
     for frame in frames {
         print(' \r $frame $prefix')
 
-        sleep(interval * time.millisecond)
+        sleep(interval * millisecond)
     }
 }
 
 pub fn spin(_posx string, prefix string) ? {
     frames := get_frames(_posx) ?
-
-    if frames == [] {
-        return error("Couldn't find the specified spinner")
-    }
-
     interval := get_interval(_posx) ?
       
     h := go print_spinner(prefix, frames, interval)
