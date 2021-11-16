@@ -1,6 +1,6 @@
 module spinners
 
-import os { read_file }
+import os { read_file, dir, real_path, join_path }
 import json { decode }
 import time { sleep, millisecond }
 
@@ -11,7 +11,7 @@ struct Spinner {
 }
 
 pub fn get_frames(_posx string) ?[]string {
-    spinners_data := read_file(os.real_path(os.join_path(os.dir(@FILE), "./spinners.json"))) ?
+    spinners_data := read_file(real_path(join_path(dir(@FILE), "./spinners.json"))) ?
   
     mut sets := decode([]Spinner, spinners_data) ?
 
@@ -25,7 +25,7 @@ pub fn get_frames(_posx string) ?[]string {
 }
 
 pub fn get_interval(_posx string) ?int {
-    spinners_data := os.read_file(os.real_path(os.join_path(os.dir(@FILE), "./spinners.json"))) ?
+    spinners_data := read_file(real_path(join_path(dir(@FILE), "./spinners.json"))) ?
 
     mut sets := decode([]Spinner, spinners_data) ?
     for mut set in sets {
