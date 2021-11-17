@@ -72,6 +72,7 @@ struct SharedSpinner {
 mut:
     is_running bool
     text string
+	color      string
 }
 
 pub struct Spinner {
@@ -102,7 +103,7 @@ fn (mut self Spinner) spinner_thread(frames []string, interval &i64) {
         frame := frames[index]
     
         rlock self.shr {
-            print(' \r $frame $self.shr.text')
+            print(' \r $self.shr.color$frame  \u001b[0m $self.shr.text')
         }
         
         time.sleep(interval)
@@ -150,6 +151,31 @@ pub fn (mut self Spinner) set_text(new_text string) {
     }
 }
 
+fn match_color(color string) ?string {
+        mut x := ''
+
+        match color {
+                'red' { x = '31m' }
+                'green' { x = '32m' }
+                'yellow' { x = '33m' }
+                'blue' { x = '34m' }
+                'magenta' { x = '35m' }
+                'cyan' { x = '36m' }
+                'white' { x = '37m' }
+                'black' { x = '30m' }
+                else { x = '37m' }
+        }
+
+        return x
+}
+
+pub fn (mut self Spinner) set_color(color string) ? {
+        lock self.shr {
+                mut col := match_color(color) ?
+                self.shr.color = '\u001b[$col'
+        }
+}
+
 pub fn (mut self Spinner) stop() {
     lock self.shr {
         if self.shr.is_running == false {
@@ -162,7 +188,22 @@ pub fn (mut self Spinner) stop() {
     self.running_thread.wait()
 }
 
-// TODO: add success method
-// pub fn success(text string) ? {
-// 
-// }
+pub fn (mut self Spinner) success(text string) ? {
+        self.stop()
+        print('\u001b[32m✔\u001b[0m $text')
+}
+
+pub fn (mut self Spinner) error(text string) ? {
+        self.stop()
+        print('\u001b[31m✘\u001b[0m $text')
+}
+
+pub fn (mut self Spinner) warn(text string) ? {
+        self.stop()
+        print('\u001b[33m⚠\u001b[0m $text')
+}
+
+pub fn (mut self Spinner) info(text string) ? {
+        self.stop()
+        print('\u001b[34mℹ\u001b[0m $text')
+}
