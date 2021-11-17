@@ -10,7 +10,7 @@ struct Spinner {
      interval int // in milliseconds
 }
 
-pub fn get_frames(_posx string) ?[]string {
+fn get_frames(_posx string) ?[]string {
     spinners_data := read_file(real_path(join_path(dir(@FILE), "./spinners.json"))) ?
   
     mut sets := decode([]Spinner, spinners_data) ?
@@ -24,7 +24,7 @@ pub fn get_frames(_posx string) ?[]string {
     return error("Couldn't find the specified spinner")
 }
 
-pub fn get_interval(_posx string) ?int {
+fn get_interval(_posx string) ?int {
     spinners_data := read_file(real_path(join_path(dir(@FILE), "./spinners.json"))) ?
 
     mut sets := decode([]Spinner, spinners_data) ?
@@ -37,7 +37,7 @@ pub fn get_interval(_posx string) ?int {
     return 0
 }
 
-pub fn print_spinner(prefix string, frames []string, interval int) ? {
+fn print_spinner(prefix string, frames []string, interval int) ? {
     for frame in frames {
         print(' \r $frame $prefix')
 
