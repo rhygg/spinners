@@ -66,7 +66,7 @@ pub fn (mut self Spinner) start(_posx string, suffix string) ? {
         self.shr.is_running = true
     }
 	
-	frames, interval := get_from_json(_posx) ?
+    frames, interval := get_from_json(_posx) ?
     self.running_thread = go self.spinner_thread(frames, interval, suffix)
 }
 
