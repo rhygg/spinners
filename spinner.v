@@ -31,15 +31,26 @@ fn get_from_json(posx string) ?Spinner {
     return error("Couldn't find the specified spinner")
 }
 
-fn print_spinner(spin &Spinner, prefix string) {
+fn print_spinner(spin Spinner, suffix string) {
     for frame in spin.frames {
-        print(' \r $frame $prefix')
+        print(' \r $frame $suffix')
 
         time.sleep(spin.interval)
     }
+
+    
 }
 
-pub fn spin(_posx string, prefix string) ? {
+pub fn spin(_posx string, suffix string) ? {
     data := get_from_json(_posx) ?
-    print_spinner(data, prefix)
+    h := go print_spinner(data, suffix)
+     
+    h.wait()
+    
+
+}
+
+
+pub fn success(suffix string) ? {
+
 }
