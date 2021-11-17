@@ -5,7 +5,6 @@ import x.json2 { raw_decode }
 import time
 
 struct Spinner {
-    name string
     frames []string // frames of the spinner
     interval i64 // in milliseconds
 }
