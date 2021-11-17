@@ -1,5 +1,5 @@
 # Terminal Spinners in Vlang
-
+![cast](cast.svg)
 ### Quick example
 ```v
 import spinners { Spinner }
@@ -100,22 +100,22 @@ import time
 fn main() {
     mut sp := Spinner{}
     sp.start("please wait...") ?
-    sp.set_color("magenta")
+    sp.set_color("magenta") ?
     time.sleep(1000 * time.millisecond)
     
     // instead of stop we use succeed, warning, error, or info.
     
     // sends a success message
-    sp.succeed("done!")
+    sp.success("done!") ?
     
     // sends an error message
-    sp.error("error!")
+    sp.error("error!") ?
 
     // sends a warning message
-    sp.warning("warning!")
+    sp.warning("warning!") ?
 
     // sends a info message
-    sp.info("info!")
+    sp.info("info!") ?
 
 }
 ```
