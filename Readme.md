@@ -40,6 +40,9 @@ fn main() {
 }
 ```
 
+Check the available animation types in the [spinners_condensed.json](https://github.com/rhygg/spinners/blob/master/spinners_condensed.json) file.
+
+
 ### Customizing it's frames and interval
 ```v
 import spinners { Spinner }
@@ -57,5 +60,62 @@ fn main() {
     
     sp.stop()
     println("done!")
+}
+```
+### Adding colors to the spinner
+```v
+import spinners { Spinner }
+import time
+
+fn main() {
+    mut sp := Spinner{}
+    sp.start("please wait...") ?
+    sp.set_color("magenta")
+    time.sleep(1000 * time.millisecond)
+    
+    sp.stop()
+    println("Done")
+}
+
+```
+
+**Available colors:**
+- red 
+- blue
+- yellow
+- magenta
+- cyan
+- black
+- green
+- white
+
+`default`: white
+
+### Spinner with custom messages
+
+```v 
+import spinners { Spinner }
+import time
+
+fn main() {
+    mut sp := Spinner{}
+    sp.start("please wait...") ?
+    sp.set_color("magenta")
+    time.sleep(1000 * time.millisecond)
+    
+    // instead of stop we use succeed, warning, error, or info.
+    
+    // sends a success message
+    sp.succeed("done!")
+    
+    // sends an error message
+    sp.error("error!")
+
+    // sends a warning message
+    sp.warning("warning!")
+
+    // sends a info message
+    sp.info("info!")
+
 }
 ```

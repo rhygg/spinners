@@ -1,5 +1,9 @@
 module spinners
 
+// @description A collection of spinners accessible to the terminal
+// @author      Adonis Tremblay
+// @license     MIT
+
 import os { dir, join_path, read_file, real_path }
 import x.json2 { raw_decode }
 import time
@@ -85,6 +89,8 @@ pub:
         animation AnimationType
 }
 
+// get_animation returns the animation frames for the given animation type
+// `index` is the index of the animation in the animation type
 fn get_animation(index int) ?([]string, i64) {
         spinners_data := read_file(json_path) ?
         mp_obj := raw_decode(spinners_data) ?
@@ -96,6 +102,10 @@ fn get_animation(index int) ?([]string, i64) {
         return f.arr().map(it.str()), i.int() * time.millisecond
 }
 
+// spinner_thread is the thread that runs the spinner animation
+// it is started by the spinner.start() and can be stopped via spinner.stop() method.
+// `frames` is the animation frames
+// `interval` is the time between frames
 fn (mut self Spinner) spinner_thread(frames []string, interval &i64) {
         mut index := 0
 
@@ -122,6 +132,8 @@ fn (mut self Spinner) spinner_thread(frames []string, interval &i64) {
         }
 }
 
+// start starts the spinner animation
+// `text` is the text to display while the spinner is running
 pub fn (mut self Spinner) start(text string) ? {
         lock self.shr {
                 if self.shr.is_running == true {
@@ -145,12 +157,16 @@ pub fn (mut self Spinner) start(text string) ? {
         }
 }
 
+// set_text sets the text to display while the spinner is running
+// `new_text` is the new text to display
 pub fn (mut self Spinner) set_text(new_text string) {
         lock self.shr {
                 self.shr.text = new_text
         }
 }
 
+// match_color returns the ANSI color code for the given color name
+// `color` is the color name
 fn match_color(color string) ?string {
         mut x := ''
 
@@ -169,6 +185,8 @@ fn match_color(color string) ?string {
         return x
 }
 
+// set_color sets the color to use while the spinner is running
+// `color` is the color name
 pub fn (mut self Spinner) set_color(color string) ? {
         lock self.shr {
                 mut col := match_color(color) ?
@@ -176,6 +194,8 @@ pub fn (mut self Spinner) set_color(color string) ? {
         }
 }
 
+// stop stops the spinner animation
+// it is called automatically when the spinner is dropped
 pub fn (mut self Spinner) stop() {
         lock self.shr {
                 if self.shr.is_running == false {
@@ -188,21 +208,29 @@ pub fn (mut self Spinner) stop() {
         self.running_thread.wait()
 }
 
+// success prints a success message
+// `text` is the text to display
 pub fn (mut self Spinner) success(text string) ? {
         self.stop()
         print('\u001b[32m✔\u001b[0m $text')
 }
 
+// error prints an error message
+// `text` is the text to display
 pub fn (mut self Spinner) error(text string) ? {
         self.stop()
         print('\u001b[31m✘\u001b[0m $text')
 }
 
+// warn prints a warning message
+// `text` is the text to display
 pub fn (mut self Spinner) warn(text string) ? {
         self.stop()
         print('\u001b[33m⚠\u001b[0m $text')
 }
 
+// info prints an info message
+// `text` is the text to display
 pub fn (mut self Spinner) info(text string) ? {
         self.stop()
         print('\u001b[34mℹ\u001b[0m $text')
