@@ -86,7 +86,7 @@ pub:
 }
 
 fn get_animation(index int) ?([]string, i64) {
-        spinners_data := read_file(.json_path) ?
+        spinners_data := read_file(json_path) ?
         mp_obj := raw_decode(spinners_data) ?
         mp := mp_obj.arr()[index].as_map()
 
