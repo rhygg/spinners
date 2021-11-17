@@ -1,4 +1,4 @@
-# Spinners in Vlang
+# Terminal Spinners in Vlang
 
 ### Quick example
 ```v
