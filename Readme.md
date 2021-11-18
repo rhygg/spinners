@@ -1,5 +1,18 @@
 # Terminal Spinners in Vlang
 ![cast](cast.svg)
+
+## Installation
+- With the **default** v cli
+
+```bash
+v install --git https://github.com/rhygg/spinners
+```
+or
+- With [vpkg](https://vpkg-project.github.io/) 
+
+```bash
+vpkg get spinners
+```
 ### Quick example
 ```v
 import spinners { Spinner }
