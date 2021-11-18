@@ -1,0 +1,12 @@
+
+  
+{
+    "name": "spinners",
+    "version": "0.0.1-b",
+    "author": [
+        "Adonis Tremblay <rhydderchc@gmail.com>",
+        "Viero Fernando <vierofernando9@gmail.com>"
+    ],
+    "repo": "https://github.com/rhygg/spinners",
+    "dependencies": []
+}
