@@ -12,7 +12,10 @@ import time
 #flag @VMODROOT/spinner.o
 #include "spinner.h"
 
-fn C.print_spinner_text(u8, &char, &char, int, int)
+// windows functions
+// these will be undefined in linux
+fn C.print_spinner_text(int, &char, &char, int, int)
+fn C.print_post_exit(int, int, int, &char, int)
 
 // animation types
 pub enum AnimationType {
@@ -136,14 +139,33 @@ fn (mut self Spinner) spinner_thread() {
 
     for {
         lock self.shr {
-            C.print_spinner_text(
-                self.shr.color, self.frames[index].str, 
-                self.shr.text.str, self.shr.text.len,
-                self.shr.previous_text.len
-            )
-            
-            if self.shr.text != self.shr.previous_text {
-                self.shr.previous_text = self.shr.text
+            $if windows {
+                // use native windows API calls
+                // thus, call the C function
+                C.print_spinner_text(
+                    self.shr.color, self.frames[index].str, 
+                    self.shr.text.str, self.shr.text.len,
+                    self.shr.previous_text.len
+                )
+            } $else {
+                frame := self.frames[index]
+                col := rune(self.shr.color)
+                print(' \r \x1b[3$col' + 'm$frame\x1b[0m $self.shr.text')
+
+                mut previous_len := self.shr.previous_text.len
+
+                for {
+                    if self.shr.text.len >= previous_len {
+                        self.shr.previous_text = self.shr.text
+                        break
+                    }
+
+                    // print a single space for every missing char to prevent
+                    // stdout glitches. this would only run if set_text()
+                    // is called with a string shorter than the initial string
+                    print(' ')
+                    previous_len--
+                }
             }
         }
 
@@ -230,30 +252,61 @@ pub fn (mut self Spinner) stop() {
     print('\n')
 }
 
+fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) ? {
+    if text.len == 0 {
+        return error("Text not provided.")
+    }
+
+    rlock self.shr {
+        $if windows {
+            C.print_post_exit(self.shr.text.len + self.frames[0].len, int(color), char_code, text.str, text.len)
+        } $else {
+            r := rune(color)
+            c := rune(char_code)
+
+            print(" \r \x1b[3$r" + "m$c\x1b[0m $text")
+
+            mut previous_len := self.frames[0].len + self.shr.text.len + 2
+            new_len := text.len + 3
+
+            for {
+                if new_len >= previous_len {
+                    break
+                }
+
+                print(' ')
+                previous_len--
+            }
+
+            print('\n')
+        }
+    }
+}
+
 // success prints a success message
 // `text` is the text to display
 pub fn (mut self Spinner) success(text string) ? {
-    self.stop()
-    print('\u001b[32m✔\u001b[0m $text')
+    self.stop_thread()
+    self.print_post_exit(Color.green, 0x2714, text) ?
 }
 
 // error prints an error message
 // `text` is the text to display
 pub fn (mut self Spinner) error(text string) ? {
-    self.stop()
-    print('\u001b[31m✘\u001b[0m $text')
+    self.stop_thread()
+    self.print_post_exit(Color.red, 0x2718, text) ?
 }
 
 // warn prints a warning message
 // `text` is the text to display
 pub fn (mut self Spinner) warn(text string) ? {
-    self.stop()
-    print('\u001b[33m⚠\u001b[0m $text')
+    self.stop_thread()
+    self.print_post_exit(Color.yellow, 0x26A0, text) ?
 }
 
 // info prints an info message
 // `text` is the text to display
 pub fn (mut self Spinner) info(text string) ? {
-    self.stop()
-    print('\u001b[34mℹ\u001b[0m $text')
+    self.stop_thread()
+    self.print_post_exit(Color.blue, 0x2139, text) ?
 }
