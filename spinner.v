@@ -8,6 +8,7 @@ import os { dir, join_path, read_file, real_path }
 import x.json2 { raw_decode }
 import time
 
+// only statically link if on windows
 $if windows {
     #flag @VMODROOT/spinner.o
 }
@@ -134,9 +135,7 @@ fn (mut self Spinner) set_animation(index int) {
 }
 
 // spinner_thread is the thread that runs the spinner animation
-// it is started by the spinner.start() and can be stopped via spinner.stop() method.
-// `frames` is the animation frames
-// `interval` is the time between frames
+// it is started by the spinner.start() and can be stopped via spinner.stop() method
 fn (mut self Spinner) spinner_thread() {
     mut index := 0
 
@@ -274,14 +273,13 @@ fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) {
 
             for {
                 if new_len >= previous_len {
-                    break
+                    print('\n')
+                    return
                 }
 
                 print(' ')
                 previous_len--
             }
-
-            print('\n')
         }
     }
 }
