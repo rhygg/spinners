@@ -1,4 +1,6 @@
 # Terminal Spinners in Vlang
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/0a49195147f54df9841a18abd6e07b66)](https://www.codacy.com/gh/rhygg/spinners/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=rhygg/spinners&amp;utm_campaign=Badge_Grade)
+
 `spinners` is a cross-platform V library written in C and V to create spinner animations in your terminal. Useful for creating CLIs in V. Sample output:
 
 ![cast](cast.svg)
@@ -6,11 +8,11 @@
 ## Installation
 With the **default** v cli:
 ```bash
-$ v install --git https://github.com/rhygg/spinners
+v install --git https://github.com/rhygg/spinners
 ```
 or with [vpkg](https://vpkg-project.github.io/):
 ```bash
-$ vpkg get spinners
+vpkg get spinners
 ```
 ### Quick example
 ```v
