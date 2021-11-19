@@ -1,17 +1,15 @@
 # Terminal Spinners in Vlang
+`spinners` is a cross-platform V library written in C and V to create spinner animations in your terminal. Useful for creating CLIs in V. Sample output:
 ![cast](cast.svg)
 
 ## Installation
-- With the **default** v cli
-
+With the **default** v cli:
 ```bash
-v install --git https://github.com/rhygg/spinners
+$ v install --git https://github.com/rhygg/spinners
 ```
-or
-- With [vpkg](https://vpkg-project.github.io/) 
-
+or with [vpkg](https://vpkg-project.github.io/):
 ```bash
-vpkg get spinners
+$ vpkg get spinners
 ```
 ### Quick example
 ```v
@@ -20,7 +18,7 @@ import time
 
 fn main() {
     mut sp := Spinner{}
-    sp.start("please wait...") ?
+    sp.start("please wait...")
     
     time.sleep(1000 * time.millisecond)
     
@@ -28,7 +26,6 @@ fn main() {
     println("done!")
 }
 ```
-
 ### Other default animation types
 ```v
 import spinners { Spinner, AnimationType }
@@ -39,7 +36,7 @@ fn main() {
         animation: AnimationType.simple_dots
     }
     
-    sp.start("please wait...") ?
+    sp.start("please wait...")
     
     time.sleep(3000 * time.millisecond)
     
@@ -52,10 +49,6 @@ fn main() {
     println("done!")
 }
 ```
-
-Check the available animation types in the [spinners_condensed.json](https://github.com/rhygg/spinners/blob/master/spinners_condensed.json) file.
-
-
 ### Customizing it's frames and interval
 ```v
 import spinners { Spinner }
@@ -63,11 +56,11 @@ import time
 
 fn main() {
     mut sp := Spinner {
-        frames: [ 'a', 'b', 'c', 'd' ]
+        frames: [ 'a', 'b', 'c', 'd' ] // string length must be consistent
         interval: 80 // in ms
     }
     
-    sp.start("please wait...") ?
+    sp.start("please wait...")
     
     time.sleep(1000 * time.millisecond)
     
@@ -77,58 +70,45 @@ fn main() {
 ```
 ### Adding colors to the spinner
 ```v
-import spinners { Spinner }
+import spinners { Spinner, Color }
 import time
 
 fn main() {
-    mut sp := Spinner{}
-    sp.start("please wait...") ?
-    sp.set_color("magenta")
+    mut sp := Spinner {
+        color: Color.magenta
+    }
+
+    sp.start("please wait...")
     time.sleep(1000 * time.millisecond)
     
     sp.stop()
-    println("Done")
+    println("done!")
 }
-
 ```
-
-**Available colors:**
-- red 
-- blue
-- yellow
-- magenta
-- cyan
-- black
-- green
-- white
-
-`default`: white
-
 ### Spinner with custom messages
-
 ```v 
-import spinners { Spinner }
+import spinners { Spinner, Color }
 import time
 
 fn main() {
-    mut sp := Spinner{}
-    sp.start("please wait...") ?
-    sp.set_color("magenta") ?
+    mut sp := Spinner {
+        color: Color.magenta
+    }
+
+    sp.start("please wait...")
     time.sleep(1000 * time.millisecond)
     
-    // instead of stop we use succeed, warning, error, or info.
-    
+    // instead of stop we can use success, warning, error, or info. 
     // sends a success message
-    sp.success("done!") ?
+    sp.success("done!")
     
     // sends an error message
-    sp.error("error!") ?
+    sp.error("error!")
 
     // sends a warning message
-    sp.warning("warning!") ?
+    sp.warning("warning!")
 
     // sends a info message
-    sp.info("info!") ?
-
+    sp.info("info!")
 }
 ```

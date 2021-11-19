@@ -186,7 +186,7 @@ fn (mut self Spinner) spinner_thread() {
 
 // start starts the spinner animation
 // `text` is the text to display while the spinner is running
-pub fn (mut self Spinner) start(text string) ? {
+pub fn (mut self Spinner) start(text string) {
     lock self.shr {
         if self.shr.is_running == true {
             return
@@ -252,9 +252,9 @@ pub fn (mut self Spinner) stop() {
     print('\n')
 }
 
-fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) ? {
+fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) {
     if text.len == 0 {
-        return error("Text not provided.")
+        return
     }
 
     rlock self.shr {
@@ -285,28 +285,28 @@ fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) ?
 
 // success prints a success message
 // `text` is the text to display
-pub fn (mut self Spinner) success(text string) ? {
+pub fn (mut self Spinner) success(text string) {
     self.stop_thread()
-    self.print_post_exit(Color.green, 0x2714, text) ?
+    self.print_post_exit(Color.green, 0x2714, text)
 }
 
 // error prints an error message
 // `text` is the text to display
-pub fn (mut self Spinner) error(text string) ? {
+pub fn (mut self Spinner) error(text string) {
     self.stop_thread()
-    self.print_post_exit(Color.red, 0x2718, text) ?
+    self.print_post_exit(Color.red, 0x2718, text)
 }
 
 // warn prints a warning message
 // `text` is the text to display
-pub fn (mut self Spinner) warn(text string) ? {
+pub fn (mut self Spinner) warn(text string) {
     self.stop_thread()
-    self.print_post_exit(Color.yellow, 0x26A0, text) ?
+    self.print_post_exit(Color.yellow, 0x26A0, text)
 }
 
 // info prints an info message
 // `text` is the text to display
-pub fn (mut self Spinner) info(text string) ? {
+pub fn (mut self Spinner) info(text string) {
     self.stop_thread()
-    self.print_post_exit(Color.blue, 0x2139, text) ?
+    self.print_post_exit(Color.blue, 0x2139, text)
 }
