@@ -18,7 +18,7 @@ import time
 
 fn main() {
     mut sp := Spinner{}
-    sp.start("please wait...")
+    sp.start("please wait...") ?
     
     time.sleep(1000 * time.millisecond)
     
@@ -36,7 +36,7 @@ fn main() {
         animation: AnimationType.simple_dots
     }
     
-    sp.start("please wait...")
+    sp.start("please wait...") ?
     
     time.sleep(3000 * time.millisecond)
     
@@ -60,7 +60,7 @@ fn main() {
         interval: 80 // in ms
     }
     
-    sp.start("please wait...")
+    sp.start("please wait...") ?
     
     time.sleep(1000 * time.millisecond)
     
@@ -95,7 +95,7 @@ fn main() {
         color: Color.magenta
     }
 
-    sp.start("please wait...")
+    sp.start("please wait...") ?
     time.sleep(1000 * time.millisecond)
     
     // instead of stop we can use success, warning, error, or info. 

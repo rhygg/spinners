@@ -8,8 +8,11 @@ import os { dir, join_path, read_file, real_path }
 import x.json2 { raw_decode }
 import time
 
+$if windows {
+    #flag @VMODROOT/spinner.o
+}
+
 #flag -I @VMODROOT
-#flag @VMODROOT/spinner.o
 #include "spinner.h"
 
 // windows functions
@@ -186,10 +189,10 @@ fn (mut self Spinner) spinner_thread() {
 
 // start starts the spinner animation
 // `text` is the text to display while the spinner is running
-pub fn (mut self Spinner) start(text string) {
+pub fn (mut self Spinner) start(text string) ? {
     lock self.shr {
         if self.shr.is_running == true {
-            return
+            return error("The thread is already running. Please call stop() first.")
         }
 
         self.shr.is_running = true

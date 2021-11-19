@@ -38,7 +38,8 @@ static void init_handle(void) {
 void print_post_exit(int prev_len, const int color,
     const int symbol_char_code, const char * message, const int message_len) {
 
-    init_handle();
+    if (con == NULL)
+        init_handle();
 
     WriteConsoleA(con, "\r ", 2, NULL, NULL);
     
@@ -61,7 +62,8 @@ void print_spinner_text(
     const int color, const char * frame, const char * new_text,
     const int new_text_size, int prev_len) {
 
-    init_handle();
+    if (con == NULL)
+        init_handle();
 
     WriteConsoleA(con, "\r ", 2, NULL, NULL);
     
