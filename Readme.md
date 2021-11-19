@@ -1,5 +1,6 @@
 # Terminal Spinners in Vlang
 `spinners` is a cross-platform V library written in C and V to create spinner animations in your terminal. Useful for creating CLIs in V. Sample output:
+
 ![cast](cast.svg)
 
 ## Installation
