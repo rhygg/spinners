@@ -1,7 +1,4 @@
 #include "spinner.h"
-
-// windows-only code.
-#ifdef _WIN32
 #include <windows.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -79,5 +76,3 @@ void print_spinner_text(
         prev_len--;
     }
 }
-
-#endif
