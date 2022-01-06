@@ -6,6 +6,7 @@ module spinners
 import os { dir, join_path, read_file, real_path }
 import x.json2 { raw_decode }
 import time
+import term
 
 // only statically link if on windows
 $if windows {
@@ -122,7 +123,7 @@ const (
 // `index` is the index of the animation in the animation type
 // all panics shouldn't happen, so they are suppressed
 fn (mut self Spinner) set_animation(index int) {
-        spinners_data := read_file(json_path) or { return }
+        spinners_data := read_file(.json_path) or { return }
         mp_obj := raw_decode(spinners_data) or { return }
         mp := mp_obj.arr()[index].as_map()
 
@@ -137,7 +138,6 @@ fn (mut self Spinner) set_animation(index int) {
 // it is started by the spinner.start() and can be stopped via spinner.stop() method
 fn (mut self Spinner) spinner_thread() {
         mut index := 0
-
         for {
                 lock self.shr {
                         $if windows {
@@ -204,7 +204,7 @@ pub fn (mut self Spinner) start(text string) ? {
                 }
         } else {
                 if self.animation == AnimationType.@none {
-                        self.set_animation(default_index)
+                        self.set_animation(.default_index)
                 } else {
                         self.set_animation(int(self.animation) - 1)
                 }
@@ -247,7 +247,7 @@ fn (mut self Spinner) stop_thread() {
 // it is called automatically when the spinner is dropped
 pub fn (mut self Spinner) stop() {
         self.stop_thread()
-        print('\n')
+        term.erase_line_clear()
 }
 
 fn (mut self Spinner) print_post_exit(color Color, char_code int, text string) {
