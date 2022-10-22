@@ -123,7 +123,7 @@ const (
 // `index` is the index of the animation in the animation type
 // all panics shouldn't happen, so they are suppressed
 fn (mut self Spinner) set_animation(index int) {
-        spinners_data := read_file(.json_path) or { return }
+        spinners_data := read_file(spinners.json_path) or { return }
         mp_obj := raw_decode(spinners_data) or { return }
         mp := mp_obj.arr()[index].as_map()
 
@@ -149,6 +149,7 @@ fn (mut self Spinner) spinner_thread() {
                                 frame := self.frames[index]
                                 col := rune(self.shr.color)
                                 print(' \r \x1b[3$col' + 'm$frame\x1b[0m $self.shr.text')
+                                flush_stdout()
 
                                 mut previous_len := self.shr.previous_text.len
 
@@ -204,7 +205,7 @@ pub fn (mut self Spinner) start(text string) ? {
                 }
         } else {
                 if self.animation == AnimationType.@none {
-                        self.set_animation(.default_index)
+                        self.set_animation(spinners.default_index)
                 } else {
                         self.set_animation(int(self.animation) - 1)
                 }
