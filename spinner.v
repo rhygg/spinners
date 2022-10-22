@@ -149,6 +149,7 @@ fn (mut self Spinner) spinner_thread() {
                                 frame := self.frames[index]
                                 col := rune(self.shr.color)
                                 print(' \r \x1b[3$col' + 'm$frame\x1b[0m $self.shr.text')
+                                flush_stdout()
 
                                 mut previous_len := self.shr.previous_text.len
 
