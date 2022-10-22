@@ -109,7 +109,7 @@ fn main() {
     sp.error("error!")
 
     // sends a warning message
-    sp.warning("warning!")
+    sp.warn("warning!")
 
     // sends a info message
     sp.info("info!")
