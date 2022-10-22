@@ -123,7 +123,7 @@ const (
 // `index` is the index of the animation in the animation type
 // all panics shouldn't happen, so they are suppressed
 fn (mut self Spinner) set_animation(index int) {
-        spinners_data := read_file(.json_path) or { return }
+        spinners_data := read_file(spinners.json_path) or { return }
         mp_obj := raw_decode(spinners_data) or { return }
         mp := mp_obj.arr()[index].as_map()
 
@@ -204,7 +204,7 @@ pub fn (mut self Spinner) start(text string) ? {
                 }
         } else {
                 if self.animation == AnimationType.@none {
-                        self.set_animation(.default_index)
+                        self.set_animation(spinners.default_index)
                 } else {
                         self.set_animation(int(self.animation) - 1)
                 }

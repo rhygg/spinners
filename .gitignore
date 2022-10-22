@@ -6,3 +6,5 @@ spinner
 *.so
 *.dylib
 *.dll
+# VLS log
+vls.log
